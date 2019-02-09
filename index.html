@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Test Website</title>
+        <meta name="description" content="An interactive getting started guide for Brackets.">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+        
+        <style>
+            #topBar {
+                margin-top: 50px;
+            }
+            
+            .scrolling-wrapper {
+                overflow-x: scroll;
+                overflow-y: hidden;
+                white-space: nowrap;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
+            button:focus {outline:0;}
+            
+            .textCard {
+                display: inline-block;
+                border-radius: 10px;
+                margin: 5px;
+                box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
+                text-align: center;
+                background-color: #f1f1f1;
+                border-style: none;
+            }
+            
+            .textCard:active {
+                background-color: #e1e1e1 !important;
+            }
+            
+            .description {
+                font-family: 'Roboto', sans-serif;
+                margin: 10px;
+            }
+            
+            .card {
+                padding: 0;
+            }
+
+        </style>
+    </head>
+    <body id=”particles-js” style="overflow-y: scroll">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="scrolling-wrapper col-sm-10">
+                <button class="textCard" onclick="updateView(1);"><p class="description">Task 1</p></button>
+                <button class="textCard" onclick="updateView(2);"><p class="description">Task 2</p></button>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="card text-center col-sm-10">
+                <div id="descHeader" class="card-header">
+                    Featured
+                </div>
+                <div id="desc" class="card-body">
+                </div>
+                <div id="resWrapper" class="card-footer">
+                    2 days ago
+                </div>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+        
+        <script>
+            let repo = "http://localhost:5000/todo/api/v1.0/tasks/"
+            $(document).ready(myFunction)
+            $(document).ready(updateView(1))
+            
+            function myFunction() {
+                $.ajax({
+                    url: "http://localhost:5000/todo/api/v1.0/tasks/1"
+                }).then(function(data) {
+                    $("#asap").text(data.task.description)
+                });
+            }
+            
+            function updateView(index) {
+                $.ajax({
+                    url: repo + String(index)
+                }).then(function(data){
+                    $("#descHeader").text(data.task.title)
+                    $("#desc").text(data.task.description)
+                    console.log(data.task.keywords[0]);
+                    $("#resWrapper").text(data.task.keywords[0])
+                })
+            }
+        </script>
+    </body>
+</html>
