@@ -90,13 +90,3 @@ def generate(classA, configA, classB, configB):
 
 
     return [synp, counts]
-
-#print(df)
-
-
-
-print(generate(0,0,1,1))
-
-
-#[['B757 flight crew reported experiencing an uncorrectable slat malfunction on departure necessitating an emergency diversion.', 'EMB-145 flight crew reported their engine Anti-Ice failed in icing conditions; which subsequently led to a diversion.', 'Air carrier flight crew reported a missed crossing restriction on an RNAV SID.', 'B737 flight crew reported a flap system malfunction during initial climbout resulting in a diversion.', 'B777 First Officer reported a stick shaker activation and loss of altitude.', 'B757 flight crew reported electrical fumes and diverting to alternate airport.'],
-#[7, 2, 3, 0, 0, 4, 0, 2, 0]
