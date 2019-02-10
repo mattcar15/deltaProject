@@ -5,13 +5,15 @@ df = pd.read_csv(fileName)
 
 
 #Synopsis => CR
-synopsis = df['Report 1.2']
 flightPhase = df['Assessments.1']
 environment = df['Environment.1']
 makeModelName = df['Aircraft 1.2']
 primaryProblem = df['Aircraft 1.9']
 light = df['Environment.3']
+synopsis = df['Report 1.2']
 
+
+dataAll = {flightPhase, environment,makeModelName,primaryProblem, light, synopsis}
 
 #Weather Elements / Visibility
 #col K
@@ -63,4 +65,5 @@ print(df)
 
 
 def generateData(classA, configA, classB, configB):
+
     return 1
