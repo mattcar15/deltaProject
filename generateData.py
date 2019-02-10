@@ -13,7 +13,7 @@ light = df['Environment.3']
 synopsis = df['Report 1.2']
 
 
-dataAll =[flightPhase, environment,  makeModelName,primaryProblem, light]
+dataAll =[flightPhase, environment,  makeModelName, primaryProblem, light]
 
 
 
@@ -59,34 +59,67 @@ def generate(classA, configA, classB, configB):
                 #print("Config A", num, str(configADatum))
                 #print(arrAll[classA][configA] , " =? " ,  str(configADatum))
 
-                if (str(arrAll[classA][configA]) == str(configADatum)):
-                    #print(arrAll[classA][configA])
+                def runCounts():
+                    # print(arrAll[classA][configA])
                     try:
                         if (float(dataAll[classB][num])):
                             pass
-                            #print("flt", float(dataAll[classB][num]));
-                            #print(dataAll[classB][num])
+                            # print("flt", float(dataAll[classB][num]));
+                            # print(dataAll[classB][num])
                     except ValueError:
-                        #print(str(dataAll[classB][num]), " in " , (str(arrAll[classB])))
+                        # print(str(dataAll[classB][num]), " in " , (str(arrAll[classB])))
                         def capture(input):
                             if (input in (arrAll[classB])):
                                 counts[(arrAll[classB]).index(input)] += 1
+
                             if (str(arrAll[classB][configB]) in input):
                                 synp.append(synopsis[num])
 
-                        if (classB == 1 or classB == 2):
+                        if (classB == 0 or classB == 1):
                             if (str(dataAll[classB][num]).find(';') > 0):
                                 #print(str(dataAll[classB][num]))
-                                splitted =  str(dataAll[classB][num]).split(';')
-                                #print(splitted)
+                                splitted = str(dataAll[classB][num]).split(';')
                                 for inp in splitted:
                                     capture(inp)
                             else:
                                 capture(str(dataAll[classB][num]))
-
+                        elif (classB == 2):
+                            #print("orig", str(dataAll[classB][num]))
+                            for type in arrAll[classB]:
+                                if (str(dataAll[classB][num]).find(type) > 0):
+                                    #print(type, " ? " , str(dataAll[classB][num]))
+                                    #print(str(arrAll[classB][configB]),  type)
+                                    capture(type)
+                                    continue
                         else:
                             capture(str(dataAll[classB][num]))
+
+                if (classA == 0 or classA == 1):
+                    if (configADatum.find(';') > 0):
+                        # print(str(dataAll[classB][num]))
+                        splitted = str(configADatum).split(';')
+                        #print(str(arrAll[classA][configA]), splitted)
+                        #print(str(arrAll[classA][configA]) in splitted)
+
+                        if (str(arrAll[classA][configA]) in splitted):
+                            runCounts()
+                            pass
+                elif (classA == 2):
+                    if (str(configADatum).find(str(arrAll[classA][configA])) > 0):
+                        runCounts()
+
+                if (str(arrAll[classA][configA]) == str(configADatum)):
+                    runCounts()
+
 
 
 
     return [synp, counts]
+
+
+#generate(3,1,2,4)
+#print(generate(3,1,2,4))
+
+
+#[['B757 flight crew reported experiencing an uncorrectable slat malfunction on departure necessitating an emergency diversion.', 'EMB-145 flight crew reported their engine Anti-Ice failed in icing conditions; which subsequently led to a diversion.', 'Air carrier flight crew reported a missed crossing restriction on an RNAV SID.', 'B737 flight crew reported a flap system malfunction during initial climbout resulting in a diversion.', 'B777 First Officer reported a stick shaker activation and loss of altitude.', 'B757 flight crew reported electrical fumes and diverting to alternate airport.'],
+#[7, 3, 4, 1, 1, 5, 1, 2, 0]]
