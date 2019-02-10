@@ -52,8 +52,8 @@ def generate(classA, configA, classB, configB):
         if(num != 0, configADatum != None):
             try:
                 if (float(configADatum)):
-                    #pass
-                    print("NAN")
+                    pass
+                    #print("NAN")
             except ValueError:
                 #print("mnot NAN boi")
                 #print("Config A", num, str(configADatum))
@@ -68,11 +68,25 @@ def generate(classA, configA, classB, configB):
                             #print(dataAll[classB][num])
                     except ValueError:
                         #print(str(dataAll[classB][num]), " in " , (str(arrAll[classB])))
+                        def capture(input):
+                            if (input in (arrAll[classB])):
+                                counts[(arrAll[classB]).index(input)] += 1
+                            if (str(arrAll[classB][configB]) in input):
+                                synp.append(synopsis[num])
 
-                        if (str(dataAll[classB][num]) in (arrAll[classB])):
-                            counts[(arrAll[classB]).index(str(dataAll[classB][num]))] += 1
-                        if (str(arrAll[classB][configB]) in str(dataAll[classB][num])):
-                            synp.append(synopsis[num])
+                        if (classB == 1 or classB == 2):
+                            if (str(dataAll[classB][num]).find(';') > 0):
+                                #print(str(dataAll[classB][num]))
+                                splitted =  str(dataAll[classB][num]).split(';')
+                                #print(splitted)
+                                for inp in splitted:
+                                    capture(inp)
+                            else:
+                                capture(str(dataAll[classB][num]))
+
+                        else:
+                            capture(str(dataAll[classB][num]))
+
 
 
     return [synp, counts]
@@ -83,3 +97,6 @@ def generate(classA, configA, classB, configB):
 
 print(generate(0,0,1,1))
 
+
+#[['B757 flight crew reported experiencing an uncorrectable slat malfunction on departure necessitating an emergency diversion.', 'EMB-145 flight crew reported their engine Anti-Ice failed in icing conditions; which subsequently led to a diversion.', 'Air carrier flight crew reported a missed crossing restriction on an RNAV SID.', 'B737 flight crew reported a flap system malfunction during initial climbout resulting in a diversion.', 'B777 First Officer reported a stick shaker activation and loss of altitude.', 'B757 flight crew reported electrical fumes and diverting to alternate airport.'],
+#[7, 2, 3, 0, 0, 4, 0, 2, 0]
