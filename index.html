@@ -17,11 +17,11 @@
             }
             
             .scrolling-wrapper {
-                overflow-x: scroll;
-                overflow-y: hidden;
+                display: flex;
                 white-space: nowrap;
+                flex-wrap: wrap;
+                align-items: center;
                 margin-top: 20px;
-                margin-bottom: 20px;
                 text-align: center;
             }
             
@@ -37,10 +37,6 @@
                 border-style: none;
             }
             
-            .textCard:active {
-                background-color: #e1e1e1 !important;
-            }
-            
             .description {
                 font-family: 'Roboto', sans-serif;
                 margin: 10px;
@@ -49,56 +45,139 @@
             .card {
                 padding: 0;
             }
+            
+            h2 {
+                font-family: 'Roboto', sans-serif;
+                font-size: 20px;
+            }
 
         </style>
     </head>
     <body id=”particles-js” style="overflow-y: scroll">
         <div class="row">
             <div class="col-sm-1"></div>
-            <div class="scrolling-wrapper col-sm-10">
-                <button class="textCard" onclick="updateView(1);"><p class="description">Task 1</p></button>
-                <button class="textCard" onclick="updateView(2);"><p class="description">Task 2</p></button>
+            <div class="scrolling-wrapper col-sm-10 justify-content-center">
+                <button class="textCard d-flex" onclick="updateView(0);"><p class="description">Flight Phase</p></button>
+                <button class="textCard d-flex" onclick="updateView(1);"><p class="description">Environment</p></button>
+                <button class="textCard d-flex" onclick="updateView(2);"><p class="description">Make Model Name</p></button>
+                <button class="textCard d-flex" onclick="updateView(3);"><p class="description">Primary Problem</p></button>
+                <button class="textCard d-flex" onclick="updateView(4);"><p class="description">Aircraft Component</p></button>
+                <button class="textCard d-flex" onclick="updateView(5);"><p class="description">Primary Component</p></button>
+                <button class="textCard d-flex" onclick="updateView(6);"><p class="description">Synopsis</p></button>
             </div>
             <div class="col-sm-1"></div>
         </div>
+        
+        <hr>
+        
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4" style="text-align: center">
+                <h2 id="redSelectTitle"></h2>
+                <select id="redSelect" onchange="getRedSelect();">
+                </select>
+            </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-4" style="text-align: center">
+                <h2 id="blueSelectTitle"></h2>
+                <select id="blueSelect" onchange="getBlueSelect();">
+                </select>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+
+        <hr>
         
         <div class="row">
             <div class="col-sm-1"></div>
             <div class="card text-center col-sm-10">
                 <div id="descHeader" class="card-header">
-                    Featured
+                    Graph Title
                 </div>
                 <div id="desc" class="card-body">
+                    Graph here
                 </div>
                 <div id="resWrapper" class="card-footer">
-                    2 days ago
+                    Other stuff
                 </div>
             </div>
             <div class="col-sm-1"></div>
         </div>
         
         <script>
-            let repo = "http://localhost:5000/todo/api/v1.0/tasks/"
-            $(document).ready(myFunction)
-            $(document).ready(updateView(1))
+            let repo = "http://localhost:5000/todo/api/v1.0/tasks/";
+            var selected = [];
+            var anyBoxesChecked = [];
+            var selectCount = 0;
+            var redI = -1;
+            var blueI = -1;
+            var selectData = [
+                ["Aircraft", "Procedure", "Equipment / Tooling", "Human Factors", "Chart Or Publication", "Weather", "Airport", "Ambiguous", "Airspace Structure", "ATC Equipment / Nav Facility / Buildings", "Company Policy", "Manuals", "MEL", "Incorrect / Not Installed / Unavailable Part", "Environment - Non Weather Related", "Staffing", "Logbook Entry"],
+                ["test", "that", "blue", "also", "works"]
+            ];
             
-            function myFunction() {
+            /*function myFunction() {
                 $.ajax({
                     url: "http://localhost:5000/todo/api/v1.0/tasks/1"
                 }).then(function(data) {
                     $("#asap").text(data.task.description)
                 });
-            }
+            }*/
             
             function updateView(index) {
-                $.ajax({
-                    url: repo + String(index)
-                }).then(function(data){
-                    $("#descHeader").text(data.task.title)
-                    $("#desc").text(data.task.description)
-                    console.log(data.task.keywords[0]);
-                    $("#resWrapper").text(data.task.keywords[0])
-                })
+                if (index !== blueI && index !== redI) {
+                    if (selectCount === 2) {
+                        alert("You can only have two categories selected at once");
+                    } else {
+                        if (redI === -1) {
+                            $('.textCard').eq(index).css('background-color', 'red');
+                            selectCount += 1;
+                            redI = index;
+                        } else if (blueI === -1) {
+                            $('.textCard').eq(index).css('background-color', '#3399ff');
+                            selectCount += 1;
+                            blueI = index;
+                        }
+                    }
+                } else {
+                    if (redI === index) {
+                        $('.textCard').eq(index).css('background-color', 'red');
+                        selectCount -= 1;
+                        redI = -1;
+                    } else if (blueI === index) {
+                        $('.textCard').eq(index).css('background-color', '#3399ff');
+                        selectCount -= 1;
+                        blueI = -1;
+                    }
+                    $('.textCard').eq(index).css('background-color', '#f1f1f1');
+                }
+                makeDropDowns()
+            }
+            
+            function makeDropDowns() {
+                $("#redSelect").empty()
+                $("#blueSelect").empty()
+                if(redI === -1 || blueI === -1) {
+                    $("#redSelectTitle").text(null)
+                    $("#blueSelectTitle").text(null)
+                } else {
+                    $("#redSelectTitle").text($('.textCard').eq(redI).text())
+                    $("#blueSelectTitle").text($('.textCard').eq(blueI).text())
+                    for(var option in selectData[redI]) {
+                         $("#redSelect").append($("<option />").val(option).text(selectData[redI][option]));
+                    };  
+                    for(var option in selectData[blueI]) {
+                         $("#blueSelect").append($("<option />").val(option).text(selectData[blueI][option]));
+                    };
+                }
+            }
+            
+            function getRedSelect() {
+                console.log("You selected: " + $("#redSelect").val());
+            }
+            
+            function getBlueSelect() {
+                 console.log("You selected: " + $("#blueSelect").val());
             }
         </script>
     </body>
