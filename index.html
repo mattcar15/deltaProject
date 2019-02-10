@@ -89,19 +89,19 @@
         <hr>
         
         <div class="row">
-            <div class="col-sm-1"></div>
-            <div class="card text-center col-sm-10">
+            <div class="col-sm-2"></div>
+            <div class="card text-center col-sm-8">
                 <div id="descHeader" class="card-header">
                     Graph Title
                 </div>
                 <div id="desc" class="card-body">
-                    Graph here
+                    <canvas id="myChart" width="400" height="200"></canvas>
                 </div>
                 <div id="resWrapper" class="card-footer">
                     Other stuff
                 </div>
             </div>
-            <div class="col-sm-1"></div>
+            <div class="col-sm-2"></div>
         </div>
         
         <script>
@@ -179,6 +179,62 @@
             function getBlueSelect() {
                  console.log("You selected: " + $("#blueSelect").val());
             }
+
+            //chart js
+            //replace this with generated data values
+            var dataValues = [12, 19, 3, 5, 2, 3, 4];
+            var labels =  ["Andreas", "is", "very", "stupid", "lol", "ape", "test"]
+            var ctx = document.getElementById("myChart").getContext("2d");
+
+            function getBarColors(dataSet, colors) {
+                var colorReturn = [];
+                for (var i = 0; i < dataSet.length; i++) {
+                    colorReturn.push(colors[i % colors.length]);
+                }
+                return colorReturn;
+            }
+
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '',
+                        data: dataValues,
+                        //replace this with the dynamic data getter
+                        backgroundColor: getBarColors(dataValues, [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                            ]),
+                        borderColor: getBarColors(dataValues, [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255,99,132,1)',
+                        ]),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+            });
         </script>
     </body>
 </html>
